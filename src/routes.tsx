@@ -17,13 +17,15 @@ import History from './pages/Reserves/History';
 import Details from './pages/Reserves/Details';
 import AddItem from './pages/Reserves/AddItem';
 
+import Header from './components/Header';
+
 export default function Routes() {
   return (
     <NavigationContainer>
       <Navigator screenOptions={{ headerShown: false }}>
         <Screen 
-            name="Login" 
-            component={Home}
+            name="Login"
+            component={Login}
         />
 
         <Screen 
@@ -41,8 +43,8 @@ export default function Routes() {
           component={FoodStoreDetails}
           options={{
             headerShown: true,
-            headerStyle: { backgroundColor: 'white'}
-            // header: () => <Header showCancel={false} title="Restaurante" />
+            headerStyle: { backgroundColor: 'white'},
+            header: () => <Header title="Restaurante" />
           }}
         />
 

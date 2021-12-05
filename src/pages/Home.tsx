@@ -3,6 +3,9 @@ import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-nati
 import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native'
+import { RectButton } from 'react-native-gesture-handler';
+
+import MenuBar from '../components/MenuBar';
 
 import marker from '../images/marker.png';
 
@@ -18,9 +21,9 @@ export default function Home() {
       <View style={styles.search}>
         <Text style={styles.searchText}>1 restaurantes próximos</Text>
 
-        <TouchableOpacity style={styles.searchButton} onPress={() => {}}>
+        <RectButton style={styles.searchButton} onPress={() => {}}>
           <Feather name="search" size={20} color="#FFF" />
-        </TouchableOpacity>
+        </RectButton>
       </View>
 
       <MapView 
@@ -52,31 +55,7 @@ export default function Home() {
           </Marker>
       </MapView>
 
-      <View style={styles.menu}>
-        <TouchableOpacity onPress={() => {}}>
-          <Feather 
-            name="menu" 
-            size={30} 
-            style={{ marginLeft: 30 }} 
-            color="#FFF"
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}}>
-          <Feather
-            name="home" 
-            size={30} 
-            color="#FFF" 
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}}>
-          <Feather
-            name="user"
-            size={30}
-            style={{ marginRight: 30 }}
-            color="#FFF"
-          />
-        </TouchableOpacity>
-      </View>
+      <MenuBar />
     </View>
   )
 }
@@ -104,9 +83,9 @@ const styles = StyleSheet.create({
   },
 
   calloutText: {
-    fontFamily: 'Roboto_700Bold',
+    fontFamily: 'Roboto_500Medium',
     color: 'black',
-    fontSize: 14,
+    fontSize: 16,
   },
 
   search: {
@@ -128,8 +107,9 @@ const styles = StyleSheet.create({
   },
 
   searchText: {
-    fontFamily: 'Roboto_700Bold',
+    fontFamily: 'Roboto_500Medium',
     color: 'black',
+    fontSize: 16,
   },
 
   searchButton: {
@@ -139,21 +119,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-
-  menu: {
-    width: '100%',
-
-    position: 'absolute',
-    bottom: 0,
-
-    backgroundColor: '#4e3333',
-    height: 60,
-
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-
-    elevation: 3,
   },
 });
