@@ -35,7 +35,6 @@ export default function CreateUser() {
         style={styles.input}
       />
 
-
       <RectButton style={styles.button} onPress={() => {
         navigation.navigate('Home')
       }}>

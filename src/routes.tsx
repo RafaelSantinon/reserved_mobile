@@ -49,12 +49,12 @@ export default function Routes() {
         />
 
         <Screen 
-          name="Menus" 
+          name="Menus"
           component={Menus}
           options={{
             headerShown: true,
-            headerStyle: { backgroundColor: 'white'}
-            // header: () => <Header showCancel={false} title="Restaurante" />
+            headerStyle: { backgroundColor: 'white'},
+            header: () => <Header title="Menus" />
           }}
         />
 
@@ -64,8 +64,8 @@ export default function Routes() {
           component={MenuDetails}
           options={{
             headerShown: true,
-            headerStyle: { backgroundColor: 'white'}
-            // header: () => <Header showCancel={false} title="Restaurante" />
+            headerStyle: { backgroundColor: 'white'},
+            header: () => <Header title="Itens do menu" />
           }}
         />
 
@@ -75,8 +75,8 @@ export default function Routes() {
           component={Reserves}
           options={{
             headerShown: true,
-            headerStyle: { backgroundColor: 'white'}
-            // header: () => <Header showCancel={false} title="Restaurante" />
+            headerStyle: { backgroundColor: 'white'},
+            header: () => <Header title="Reservas" />
           }}
         />
 
