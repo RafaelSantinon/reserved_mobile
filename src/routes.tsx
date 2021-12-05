@@ -85,8 +85,8 @@ export default function Routes() {
           component={History}
           options={{
             headerShown: true,
-            headerStyle: { backgroundColor: 'white'}
-            // header: () => <Header showCancel={false} title="Restaurante" />
+            headerStyle: { backgroundColor: 'white'},
+            header: () => <Header title="Situação das reservas" />
           }}
         />
 
@@ -95,8 +95,8 @@ export default function Routes() {
           component={Details}
           options={{
             headerShown: true,
-            headerStyle: { backgroundColor: 'white'}
-            // header: () => <Header showCancel={false} title="Restaurante" />
+            headerStyle: { backgroundColor: 'white'},
+            header: () => <Header title="Itens da reserva" />
           }}
         />
 
@@ -105,8 +105,8 @@ export default function Routes() {
           component={AddItem}
           options={{
             headerShown: true,
-            headerStyle: { backgroundColor: 'white'}
-            // header: () => <Header showCancel={false} title="Restaurante" />
+            headerStyle: { backgroundColor: 'white'},
+            header: () => <Header title="Restaurante" />
           }}
         />
       </Navigator>

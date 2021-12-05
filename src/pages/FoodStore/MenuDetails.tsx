@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import React from 'react';
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
-import { RectButton } from 'react-native-gesture-handler';
 
 import MenuBar from '../../components/MenuBar';
 

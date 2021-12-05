@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
 
   mapContainer: {
-    borderRadius: 20,
+    borderRadius: 10,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'black',
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   },
 
   routesText: {
-    fontFamily: 'Robot_700Bold',
+    fontFamily: 'Roboto_700Bold',
     color: 'white'
   },
 
