@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Feather } from '@expo/vector-icons';
@@ -8,13 +8,36 @@ import { RectButton } from 'react-native-gesture-handler';
 import MenuBar from '../components/MenuBar';
 
 import marker from '../images/marker.png';
+import api from '../services/api';
+import { AuthContext } from '../routes';
+
+interface FoodStore {
+  id: string;
+  name: string;
+  address: any;
+}
 
 export default function Home() {
   const navigation = useNavigation();
+  const { auth } = useContext(AuthContext);
+  const [foodStores, setFoodStores] = useState<FoodStore[]>([])
 
-  function handleNavigateToOrphanageDetails() {
+  function navigateToFoodStoreDetails() {
     navigation.navigate('FoodStoreDetails')
   }
+
+  useEffect(() => {
+    api.get('food-store', {
+      headers: {
+        'Authorization': `Bearer ${auth}`
+      }
+    }).then(response => {
+
+      setFoodStores(response.data.rows)
+    }).catch(err => {
+      if (err.status === 401) navigation.navigate('Login')
+    });
+  }, [auth])
 
   return(
     <View style={styles.container}>
@@ -36,23 +59,33 @@ export default function Home() {
           longitudeDelta: 0.008
         }}
       >
-        <Marker
-          icon={marker}
-          calloutAnchor={{
-            x: 3.2,
-            y: 1,
-          }}
-          coordinate={{
-            latitude: -22.9177728,
-            longitude: -47.1386178,
-          }}
-        >
-          <Callout tooltip onPress={() => handleNavigateToOrphanageDetails()}>
+
+      {console.log(foodStores)}
+
+      {foodStores.map(foodStore => {
+        console.log('foodStore :', foodStore);
+        return(
+          <Marker
+            key={foodStore.id}
+            icon={marker}
+            calloutAnchor={{
+              x: 3.2,
+              y: 1,
+            }}
+            coordinate={{
+              latitude: foodStore?.address?.latitude,
+              longitude: foodStore?.address?.longitude,
+            }}
+          >
+            <Callout tooltip onPress={() => navigateToFoodStoreDetails()}>
               <View style={styles.calloutContainer}>
-                <Text style={styles.calloutText}>Restaurante nome</Text>
+                <Text style={styles.calloutText}>{foodStore.name}</Text>
               </View>
             </Callout>
           </Marker>
+        )
+      })}
+
       </MapView>
 
       <MenuBar />

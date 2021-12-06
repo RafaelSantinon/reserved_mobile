@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import React from 'react';
-import { StyleSheet, View, Text, Dimensions, Image, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, Image, ScrollView, TouchableOpacity, Linking } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import MapView, { Marker,} from 'react-native-maps';
 
@@ -10,6 +10,10 @@ import marker from '../../images/marker.png';
 
 export default function FoodStoreDetails() {
   const navigation = useNavigation();
+
+  function googleMaps() {
+    Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${-22.907959720822245},${-47.0725974488087}`);
+  }
 
   return (
     <View style={styles.container}>
@@ -46,9 +50,9 @@ export default function FoodStoreDetails() {
               />
             </MapView>
 
-            <View style={styles.routesContainer}>
+            <TouchableOpacity onPress={googleMaps} style={styles.routesContainer}>
               <Text style={styles.routesText}>Ver rotas no Google Maps</Text>
-            </View>
+            </TouchableOpacity>
           </View>
 
           <Text style={styles.title}>Situação de momento</Text>

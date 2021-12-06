@@ -1,12 +1,21 @@
 import { useNavigation } from '@react-navigation/core';
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Image } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 
+import api from '../services/api'
+
 import Logo from '../images/logo.png';
+
+import { AuthContext } from '../routes'
 
 export default function Login() {
   const navigation = useNavigation();
+
+  const { setAuth } = useContext(AuthContext);
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   return(
     <View style={styles.container}>
@@ -17,15 +26,27 @@ export default function Login() {
       <Text style={styles.label}>Email</Text>
       <TextInput
         style={styles.input}
+        onChangeText={setEmail}
       />
 
       <Text style={styles.label}>Senha</Text>
       <TextInput
+        secureTextEntry={true}
         style={styles.input}
+        onChangeText={setPassword}
       />
 
       <RectButton style={styles.loginButton} onPress={() => {
-        navigation.navigate('Home')
+        api.post('login', {
+          "email": email,
+          "password": password,
+        }).then(response => {
+          setAuth(response.data);
+    
+          navigation.navigate('Home');
+        }).catch(err => {
+          if (err.status === 401) navigation.navigate('Login');
+        });
       }}>
         <Text style={styles.loginButtonText}>Entrar</Text>
       </RectButton>

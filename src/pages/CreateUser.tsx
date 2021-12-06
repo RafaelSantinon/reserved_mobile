@@ -1,10 +1,18 @@
 import { useNavigation } from '@react-navigation/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, Image } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 
+import api from '../services/api'
+
 export default function CreateUser() {
   const navigation = useNavigation();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [bornAt, setBornAt] = useState('');
+  const [cellphone, setCellphone] = useState('');
 
   return(
     <View style={styles.container}>
@@ -13,30 +21,48 @@ export default function CreateUser() {
       <Text style={styles.label}>Email</Text>
       <TextInput
         style={styles.input}
+        onChangeText={setEmail}
       />
 
       <Text style={styles.label}>Senha</Text>
       <TextInput
+        secureTextEntry={true}
         style={styles.input}
+        onChangeText={setPassword}
       />
 
       <Text style={styles.label}>Nome</Text>
       <TextInput
         style={styles.input}
+        onChangeText={setName}
       />
 
       <Text style={styles.label}>Data de nascimento</Text>
       <TextInput
         style={styles.input}
+        onChangeText={setBornAt}
       />
 
       <Text style={styles.label}>Celular</Text>
       <TextInput
         style={styles.input}
+        onChangeText={setCellphone}
       />
 
       <RectButton style={styles.button} onPress={() => {
-        navigation.navigate('Home')
+        api.post('user', {
+          "type": 4,
+          "email": email,
+          "password": password,
+          "name": name,
+          "cellphone": cellphone,
+          "bornAt": bornAt,
+        }).then(response => {
+    
+          navigation.navigate('Home');
+        }).catch(err => {
+          if (err.status === 401) navigation.navigate('Login');
+        });
       }}>
         <Text style={styles.buttonText}>Criar</Text>
       </RectButton>
