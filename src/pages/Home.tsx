@@ -21,9 +21,10 @@ export default function Home() {
   const navigation = useNavigation();
   const { auth } = useContext(AuthContext);
   const [foodStores, setFoodStores] = useState<FoodStore[]>([])
+  const [foodStoresNumber, setFoodStoresNumber] = useState('')
 
-  function navigateToFoodStoreDetails() {
-    navigation.navigate('FoodStoreDetails')
+  function navigateToFoodStoreDetails(id: string) {
+    navigation.navigate('FoodStoreDetails', { id })
   }
 
   useEffect(() => {
@@ -34,15 +35,16 @@ export default function Home() {
     }).then(response => {
 
       setFoodStores(response.data.rows)
+      setFoodStoresNumber(response.data.count)
     }).catch(err => {
-      if (err.status === 401) navigation.navigate('Login')
+      if (err.status === 401) navigation.navigate('Login');
     });
   }, [auth])
 
   return(
     <View style={styles.container}>
       <View style={styles.search}>
-        <Text style={styles.searchText}>1 restaurantes próximos</Text>
+        <Text style={styles.searchText}>{foodStoresNumber} restaurantes próximos</Text>
 
         <RectButton style={styles.searchButton} onPress={() => {}}>
           <Feather name="search" size={20} color="#FFF" />
@@ -52,18 +54,15 @@ export default function Home() {
       <MapView 
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        initialRegion={{
-          latitude: -22.9177728,
-          longitude: -47.1386178,
+        initialRegion={{ 
+          latitude: -22.906101766674592,
+          longitude: -47.070579797113346,
           latitudeDelta: 0.008,
           longitudeDelta: 0.008
         }}
       >
 
-      {console.log(foodStores)}
-
       {foodStores.map(foodStore => {
-        console.log('foodStore :', foodStore);
         return(
           <Marker
             key={foodStore.id}
@@ -77,7 +76,7 @@ export default function Home() {
               longitude: foodStore?.address?.longitude,
             }}
           >
-            <Callout tooltip onPress={() => navigateToFoodStoreDetails()}>
+            <Callout tooltip onPress={() => navigateToFoodStoreDetails(foodStore.id)}>
               <View style={styles.calloutContainer}>
                 <Text style={styles.calloutText}>{foodStore.name}</Text>
               </View>

@@ -1,5 +1,5 @@
-import { useNavigation } from '@react-navigation/core';
-import React from 'react';
+import { useNavigation, useRoute } from '@react-navigation/core';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Dimensions, Image, ScrollView, TouchableOpacity, Linking } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import MapView, { Marker,} from 'react-native-maps';
@@ -7,33 +7,88 @@ import MapView, { Marker,} from 'react-native-maps';
 import MenuBar from '../../components/MenuBar';
 
 import marker from '../../images/marker.png';
+import { AuthContext } from '../../routes';
+import api from '../../services/api';
+
+interface FoodStore {
+  id: string;
+  name: string;
+  description: string;
+  openHours: string;
+  address: {
+    latitude: number;
+    longitude: number;
+  };
+  image: {
+    id: string;
+    path: string;
+  };
+}
 
 export default function FoodStoreDetails() {
+  const { auth } = useContext(AuthContext);
+  const route = useRoute();
   const navigation = useNavigation();
+  const [foodStore, setFoodStore] = useState<FoodStore>({
+    id: '',
+    name: '',
+    description: '',
+    openHours: '',
+    address: {
+      latitude: 0,
+      longitude: 0,
+    },
+    image: {
+      id: '',
+      path: '',
+    }
+  });
+
+  const params = route.params as any;
 
   function googleMaps() {
-    Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${-22.907959720822245},${-47.0725974488087}`);
+    Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${foodStore.address.latitude},${foodStore.address.longitude}`);
   }
+
+  useEffect(() => {
+    if (params.id) {
+      api.get(`food-store/${params.id}`, {
+        headers: {
+          'Authorization': `Bearer ${auth}`
+        },
+      }).then(
+        response => {
+        console.log('response :', response.data);
+          setFoodStore(response.data)
+        }
+      ).catch(err => {
+        if (err.status === 401) navigation.navigate('Login');
+      });
+    }
+  },[params.id, auth])
+
+  const urlImg = `https://localhost:3333/uploads/${foodStore.image.path}`
 
   return (
     <View style={styles.container}>
 
       <ScrollView style={{ marginBottom: 50 }}>
+        {console.log(urlImg)}
         <View style={styles.imagesContainer}>
-            <Image style={styles.image} source={{ uri: 'https://fmnova.com.br/images/noticias/safe_image.jpg' }} />
+            <Image key={foodStore.image.id} style={styles.image} source={{ uri: urlImg}} />
         </View>
 
         <View style={styles.detailsContainer}>
-          <Text style={styles.title}>Restaurante teste 1</Text>
-          <Text style={styles.description}>Presta assistência a crianças de 06 a 15 anos que se encontre em situação de risco e/ou vulnerabilidade social.</Text>
+          <Text style={styles.title}>{foodStore.name}</Text>
+          <Text style={styles.description}>{foodStore.description}</Text>
         
           <View style={styles.mapContainer}>
             <MapView 
               initialRegion={{
-                latitude: -27.2092052,
-                longitude: -49.6401092,
+                latitude: -22.906101766674592,
+                longitude: -47.070579797113346,
                 latitudeDelta: 0.008,
-                longitudeDelta: 0.008,
+                longitudeDelta: 0.008
               }} 
               zoomEnabled={false}
               pitchEnabled={false}
@@ -44,8 +99,8 @@ export default function FoodStoreDetails() {
               <Marker 
                 icon={marker}
                 coordinate={{ 
-                  latitude: -27.2092052,
-                  longitude: -49.6401092
+                  latitude: foodStore.address.latitude,
+                  longitude: foodStore.address.longitude
                 }}
               />
             </MapView>
@@ -56,7 +111,7 @@ export default function FoodStoreDetails() {
           </View>
 
           <Text style={styles.title}>Situação de momento</Text>
-          <Text style={styles.description}>Horário de funcionamento:</Text>
+          <Text style={styles.description}>Horário de funcionamento: {foodStore.openHours}</Text>
           <Text style={styles.description}>Taxa de ocupação:</Text>
 
           <RectButton style={styles.button} onPress={() => {
